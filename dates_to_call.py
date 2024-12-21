@@ -10,7 +10,7 @@ def get_dates_to_call_for_year(year, month, day):
     :return:
     """
     base = datetime.date(year, month, day)
-    date_list = [base - datetime.timedelta(days=x+1) for x in range(-8,7)]
+    date_list = [base - datetime.timedelta(days=x+1) for x in range(-8, 7)]
     date_list_pretty = []
     for i in date_list:
         date_list_pretty.append(str(i))
@@ -29,7 +29,7 @@ def generate_master_date_list(month, day):
     year_only = int(re.findall(r"(\d{,4})-.+", current_year)[0])
     #do we want to use 1950? may need to look at request limits.
     #we might be fine with the past 25 years
-    year_set = range(year_only, 1950, -1)
+    year_set = range(year_only, 1960, -1)
     master_date_list = []
     for year in year_set:
         single_year_dates = get_dates_to_call_for_year(year, month, day)
