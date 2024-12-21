@@ -33,6 +33,8 @@ def generate_master_date_list(month, day):
     master_date_list = []
     for year in year_set:
         single_year_dates = get_dates_to_call_for_year(year, month, day)
-        for i in single_year_dates:
-            master_date_list.append(i)
+        master_date_list.append(single_year_dates)
     return master_date_list
+
+if __name__ == '__main__':
+    print(generate_master_date_list(6, 23))
