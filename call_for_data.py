@@ -11,6 +11,8 @@ cache_session = requests_cache.CachedSession('.cache', expire_after = -1)
 retry_session = retry(cache_session, retries = 5, backoff_factor = 0.2)
 open_meteo = openmeteo_requests.Client(session = retry_session)
 
+
+
 # Make sure all required weather variables are listed here
 # The order of variables in hourly or daily is important to assign them correctly below
 def call_for_data(latitude, longitude, start_date, end_date):
@@ -37,7 +39,6 @@ def call_for_data(latitude, longitude, start_date, end_date):
     response = responses[0]
     return response
     #we may want to add some functionality to determine if there was an error with the API response
-
 
 
 def make_dataframe(api_response):
@@ -80,7 +81,7 @@ def make_master_dataframe(input_location, month, day):
         return location
     years_to_call = dates_to_call.generate_master_date_list(month, day)
     for year in years_to_call:
-        year_data = call_for_data(location[0], location[1], year[-1], year[0])
+        year_data = call_for_data(latitude=location[0], longitude=location[1], start_date=year[-1], end_date=year[0])
         if is_first_result:
             master_dataframe = make_dataframe(year_data)
             is_first_result = False

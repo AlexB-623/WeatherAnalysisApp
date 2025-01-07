@@ -1,6 +1,5 @@
 import datetime, re
 
-
 def get_dates_to_call_for_year(year, month, day):
     """
     takes a year, month, and day, and returns a list of dates, 7 before and 7 after, for that year, accounting for leap year and next/last year
@@ -28,10 +27,12 @@ def generate_master_date_list(month, day):
     for each list in the list [-1] would be the start date and [0] would be the end date
     """
     current_year = str(datetime.datetime.today())
-    year_only = int(re.findall(r"(\d{,4})-.+", current_year)[0])
+    # Added a -1 to account for a day of year that has not yet occurred for current year
+    # this means we cannot look at the current year. Is this okay?
+    year_only = int(re.findall(r"(\d{,4})-.+", current_year)[0])-1
     #do we want to use 1950? may need to look at request limits.
     #we might be fine with the past 25 years
-    year_set = range(year_only, 1960, -1)
+    year_set = range(year_only, 1980, -1)
     master_date_list = []
     for year in year_set:
         single_year_dates = get_dates_to_call_for_year(year, month, day)
