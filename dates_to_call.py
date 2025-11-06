@@ -35,6 +35,7 @@ def generate_master_date_list(month, day):
     year_set = range(year_only, 1980, -1)
     master_date_list = []
     for year in year_set:
+        #need to implement a try except loop for handling leap year or other nonexistent dates
         single_year_dates = get_dates_to_call_for_year(year, month, day)
         #take the dates from
         master_date_list.append(single_year_dates)

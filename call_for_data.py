@@ -69,10 +69,10 @@ def make_dataframe(api_response):
 
 def make_master_dataframe(input_location, month, day):
     """
-
+    Whatever you use to gather the input from a user, be sure to do some kind of input validation to get real locations and dates.
     :param input_location: string, city name
-    :param month:
-    :param day:
+    :param month: 1-12
+    :param day: 1-31
     :return: pandas dataframe with weather data for the requested city/date
     """
     is_first_result = True
