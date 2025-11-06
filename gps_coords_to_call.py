@@ -10,8 +10,8 @@ loc = Nominatim(user_agent="Geopy Library")
 def convert_location_to_gps(location):
     """
     takes a string and tries to determine if it is a known city.
-    if it is, it will return GPS coordinates for that city, otherwise, returns a string with an error message.
-    :param location:
+    if it is, it will return GPS coordinates for that city as a Tuple, otherwise, returns a string with an error message.
+    :param location: string
     :return: tuple: (lat, long, timezone) OR string with an error message.
     """
     getloc = loc.geocode(location)
@@ -33,13 +33,18 @@ def get_timezone(latitude, longitude):
 
 if __name__ == "__main__":
     test_mke = convert_location_to_gps("milwaukee")
-    print(test_mke)
+    print(f'Milwaukee GPS coords are {test_mke}')
 
 if __name__ == "__main__":
     lat = 43.04
     long = -87.91
     tz = get_timezone(lat, long)
-    print(tz)
+    print(f'the timezone for lat {lat} and long {long} is {tz}')
 
 if __name__ == "__main__":
     tz = "America/Chicago"
+
+if __name__ == '__main__':
+    broken = "laksjdf;ja;sldiem"
+    test_broken = convert_location_to_gps(broken)
+    print(f'the gps coords for {broken} are: {test_broken}')

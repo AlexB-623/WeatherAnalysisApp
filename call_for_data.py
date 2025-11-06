@@ -93,4 +93,8 @@ def make_master_dataframe(input_location, month, day):
 
 if __name__ == "__main__":
     milwaukee = make_master_dataframe("milwaukee", 6, 23)
-    print(milwaukee)
+    print(f'Working test: The results for milwaukee are: \n {milwaukee}')
+
+if __name__ == "__main__":
+    milwaukee = make_master_dataframe("auekxkne", 6, 23)
+    print(f'Broken test: The results for milwaukee are: \n {milwaukee}')
