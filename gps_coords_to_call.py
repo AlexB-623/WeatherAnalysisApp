@@ -16,8 +16,8 @@ def convert_location_to_gps(location):
     """
     getloc = loc.geocode(location)
     try:
-        lat = round(float(getloc.latitude), 2)
-        long = round(float(getloc.longitude), 2)
+        lat = round(float(getloc.latitude), 3)
+        long = round(float(getloc.longitude), 3)
     except AttributeError:
         return "Could not convert the entered location name to GPS\n" \
                 "Please check the spelling and try again"
@@ -48,3 +48,11 @@ if __name__ == '__main__':
     broken = "laksjdf;ja;sldiem"
     test_broken = convert_location_to_gps(broken)
     print(f'the gps coords for {broken} are: {test_broken}')
+
+if __name__ == '__main__':
+    baltimore = "baltimore"
+    baltimore_md = "baltimore, md"
+    baltimore_oh = "baltimore, oh"
+    print(f'Baltimore = { convert_location_to_gps(baltimore) }')
+    print(f'Baltimore MD = {convert_location_to_gps(baltimore_md)}')
+    print(f'Baltimore OH = {convert_location_to_gps(baltimore_oh)}')
