@@ -1,6 +1,8 @@
 import openmeteo_requests
 import requests_cache
 import pandas as pd
+from openmeteo_requests import OpenMeteoRequestsError
+
 import dates_to_call, gps_coords_to_call
 from pandas.core.interchange import dataframe
 from retry_requests import retry
@@ -34,9 +36,19 @@ def call_for_data(latitude, longitude, start_date, end_date):
 		"timezone": "auto",
         "temperature_unit": "fahrenheit"
 	}
-    responses = open_meteo.weather_api(url, params=params)
-    # Process first location. Add a for-loop for multiple locations or weather models
-    response = responses[0]
+    try:
+        responses = open_meteo.weather_api(url, params=params)
+        # Process first location. Add a for-loop for multiple locations or weather models
+        response = responses[0]
+    except OpenMeteoRequestsError as e:
+        # The error message contains the API's error details, e.g.:
+        # {'error': True, 'reason': "Parameter 'latitude' is out of range"}
+        print(f"API error: {e}")
+        # Handle gracefully — log it, return a default, retry, etc.
+
+    except Exception as e:
+        # Catch any unexpected errors (network issues, etc.)
+        print(f"Unexpected error: {e}")
     return response
     #we may want to add some functionality to determine if there was an error with the API response
 
@@ -76,9 +88,11 @@ def make_master_dataframe(input_location, month, day):
     :return: pandas dataframe with weather data for the requested city/date
     """
     is_first_result = True
-    location = gps_coords_to_call.convert_location_to_gps(input_location)
-    if type(location) == str:
-        return location
+    location = input_location
+    # location = gps_coords_to_call.convert_location_to_gps(input_location)
+    # if type(location) == str:
+    #     print(location)
+    #     return location
     years_to_call = dates_to_call.generate_master_date_list(month, day)
     for year in years_to_call:
         year_data = call_for_data(latitude=location[0], longitude=location[1], start_date=year[-1], end_date=year[0])
@@ -91,10 +105,19 @@ def make_master_dataframe(input_location, month, day):
             year_dataframe = None
     return master_dataframe
 
-if __name__ == "__main__":
-    milwaukee = make_master_dataframe("milwaukee", 6, 23)
-    print(f'Working test: The results for milwaukee are: \n {milwaukee}')
+# if __name__ == "__main__":
+#     milwaukee = make_master_dataframe("Milwaukee, Wisconsin, USA", 6, 23)
+#     print(f'Working test: The results for milwaukee are: \n {milwaukee}')
+
+# if __name__ == "__main__":
+#     milwaukee = make_master_dataframe("auekxkne", 6, 23)
+#     print(f'Broken test: The results for milwaukee are: \n {milwaukee}')
 
 if __name__ == "__main__":
-    milwaukee = make_master_dataframe("auekxkne", 6, 23)
-    print(f'Broken test: The results for milwaukee are: \n {milwaukee}')
+    gps = "(39.29088, -76.61076)"
+    listgps = list(gps.replace("(", "").replace(")", "").split(","))
+    listgps[0] = float(listgps[0])
+    listgps[1] = float(listgps[1])
+    tuplegps = tuple(listgps)
+    gps = make_master_dataframe(tuplegps, 6, 23)
+    print(f'GPS test: The results for gps are: \n {gps}')
